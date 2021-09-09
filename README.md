@@ -1,12 +1,13 @@
 # Capstone-ImageToRepair
 The project involves 4-5 subsystems that will be integrated by the end of 2021.
-Subsystem #1: Image Capture Device
-Subsystem #2: Web Application
-Subsystem #3: Database
-Subsystem #4: Machine Learning
-Subsystem #5: 3D Printer
-#
-#
+* Subsystem #1: Image Capture Device
+* Subsystem #2: Web Application
+* Subsystem #3: Database
+* Subsystem #4: Machine Learning
+* Subsystem #5: 3D Printer
+
+
+
 How the project works:
   The user first takes the image capture device and plugs it into their computer/laptop via USB.
   Then, the user takes image(s) of their broken part, which will be directly uploaded to the web application.
