@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <title>SRCP: Home</title>
+</head>
+
+<style>
+    body{
+        background-color: #212529;
+    }
+
+    /*.link-animation{*/
+    /*    transition: 0.3s ease;*/
+    /*    !*background: #3fa46a;*!*/
+    /*    color: #ffffff;*/
+    /*    !*font-size: 20px;*!*/
+    /*    text-decoration: none;*/
+    /*    !*border-top: 4px solid #3fa46a;*!*/
+    /*    !*border-bottom: 4px solid #3fa46a;;*!*/
+    /*    padding: 20px 0;*/
+    /*    margin: 0 20px;*/
+    /*}*/
+
+    /*.link-animation:hover{*/
+    /*    border-top: 4px solid #ffffff;*/
+    /*    border-bottom: 4px solid #ffffff;*/
+    /*    padding: 6px 0;*/
+    /*}*/
+</style>
+
+<div class="bg-dark">
+  <body>
+  <!--Navigation bar for the main page-->
+  <div class="container px-0 mb-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand mx-auto link-animation" href="/srcp/index">SRCP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active link-animation" aria-current="page" href="/srcp/index">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-animation" href="/srcp/upload_images">Upload Images</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-animation" href="/srcp/about_us">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-animation" href="/srcp/contact" aria-disabled="true">Contact Us</a>
+            </li>
+          </ul>
+          <div class = "ml-1 text-white-50">
+            <% if signed_in? %>
+            <%= current_user.email %>
+            <%= button_to 'Sign out', sign_out_path, method: :delete %>
+            <% else %>
+            <%= button_to 'Sign in', sign_in_path, method: :get %>
+            <% end %>
+            <!--              <button class="btn btn-outline-success"><%#= link_to "Sign in", '/login', method: :get%></button>-->
+            <!--              <button class="btn btn-outline-success"><%#= link_to "Sign up", '/users/new', method: :get%></button>-->
+          </div>
+          <!--              <form class="ml-1">-->
+          <!--                <button class="btn btn-outline-success" type="submit">Log In</button>-->
+          <!--                <button class="btn btn-outline-success" type="submit">Sign Out</button>-->
+          <!--              </form>-->
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!--Project Description: How to operate/navigate the website-->
+  <div class="container bg-dark px-3">
+    <h1 class="text-white-50 text-center mb-5 text-decoration-underline">Welcome to Secure Remote Component Printing! (SRCP)</h1>
+
+    <div class="mx-auto px-5" style="width: 750px;">
+      <h3 class="text-white-50 text-decoration-underline">How it works:</h3>
+      <ol class="text-white-50">
+        <li>Take a picture (or multiple pictures) of the broken part</li>
+        <li>Upload the image(s) using the "Upload images" link</li>
+        <li>After a couple of minutes, you will receive the following:</li>
+        <ul>
+          <li>A pdf of the part explaining what it does</li>
+          <li>A description on how to replace the part</li>
+          <li>An automatic order placed with order confirmation for a 3D-printed part</li>
+        </ul>
+      </ol>
+      <h4 class="text-white-50">If you have any problems, please click on the "Contact Us" page for more information.</h4>
+    </div>
+  </div>
+  </body>
+</div>
+
+<!--Code for clearance gem-->
+<div id="flash">
+  <% flash.each do |key, value| %>
+    <div class="flash <%= key %>"><%= value %></div>
+  <% end %>
+</div>
+</html>
+
+<!--
+Project Notes:
+  1. Check out ruby gems for user login/signup (Clearance gem) (Done)
+  2. Implement the local database with users if ruby gem needs it otherwise implement database for users (Included in Clearance gem)
+  3. Add instance variables for website (Included in Clearance gem)
+  4. Design front end of each webpage (In Progress)
+  5. Figure out how to use bootstrap with ruby in-build code
+  6. Figure out how to redirect back to home page when user signs out -->
+
