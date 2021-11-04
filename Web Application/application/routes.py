@@ -1,16 +1,16 @@
 from application import app
-from PIL import Image
-from flask import Flask, request, redirect, url_for, render_template
-import os
-import io
+from flask import Flask, request, redirect, url_for, render_template, session, send_from_directory, send_file
 import requests
 import base64
 import cv2
 import numpy as np
 import math
+import pyodbc
+import io
 
 app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpg', '.jpeg', '.JPG']
 app.config['UPLOAD_FOLDER'] = 'static/uploadedImages'
+app.secret_key = 'cool_project'
 
 @app.route("/")
 @app.route("/index")
@@ -33,7 +33,6 @@ def upload_files():
 
     r = requests.post(url,data=read,headers=headers)
     
-    #nparr = np.fromstring(fileStream, np.uint8)
     image = cv2.imdecode(np.frombuffer(read, np.uint8), -1)
     predictions = r.json()['predictions']
 
@@ -78,20 +77,32 @@ def upload_files():
     img_str = cv2.imencode('.jpg', image)[1].tobytes()
     b64 = base64.b64encode(img_str)
     fileStream = b64.decode('utf-8')
-    #print(type(img))
-    #cv2.imwrite('static/uploadedImages/output.jpg', img_np)
-    #b64 = uploaded_file.stream.read()
-    #im = Image.open(base64.b64encode(uploaded_file.read()))
-    #data = io.BytesIO()
-    #im.save(data, "JPG")
-    #encoded = base64.b64encode(data.getvalue())
-    #encoded.decode('utf-8')
-    #print(type(img_np))
+    #print(fileStream)
+    #session variable to keep track of broken objects(s)
+    session['broken_object'] = broken[0]
+
     return render_template("image_output.html", binary_image=fileStream, broken_object=broken)
 
-@app.route("/image_output")
-def image_output():
-    return render_template("image_output.html")
+@app.route("/download", methods=['GET'])
+def download():
+    #use session variable to query all stuff for broken object
+    #print(session['broken_object'])
+    server = 'srcp-database.database.windows.net'
+    database = 'SRCP_Database'
+    username = ''
+    password = ''   
+    driver= '{ODBC Driver 17 for SQL Server}'
+
+    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
+    cursor = cnxn.cursor()
+
+    dbdata = cursor.execute("SELECT TOP 1 FileData,FileName FROM dbo.Files").fetchone()
+    #print(dbdata[0]) #<--------- binary data
+    buffer = io.BytesIO()
+    buffer.write(dbdata[0])
+    buffer.seek(0)
+
+    return send_file(buffer, as_attachment=True, attachment_filename='Output.png', mimetype='png')
 
 @app.route("/about_us")
 def about_us():
